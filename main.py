@@ -37,13 +37,32 @@ def read_labels(filename):
     return labels
 
 
+def flatten_list(list):
+    return [item for sublist in list for item in sublist]
+
+def extract_features(X):
+    return [flatten_list(x) for x in X]
+
+
+def knn(X_train, y_train, X_test, y_test):
+    pass
+
+
+
 def main():
     X_train = read_images(TRAIN_DATA_FILE)
     y_train = read_labels(TRAIN_LABEL_FILE)
     X_test = read_images(TEST_DATA_FILE)
     y_test = read_labels(TEST_LABEL_FILE)
 
-    
+    print(len(X_train[0]))
+    print(len(X_test[0]))
+
+    X_train = extract_features(X_train)
+    X_test = extract_features(X_test)
+
+    print(len(X_train[0]))
+    print(len(X_test[0]))
 
 
 if __name__ == '__main__':
