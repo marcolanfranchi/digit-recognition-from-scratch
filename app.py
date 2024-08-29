@@ -152,7 +152,7 @@ with tab2: # -------------------------------------------------------------------
             height=224,
             width=224,
             drawing_mode="freedraw",
-            key="canvas_1"
+            key="canvas"
             )
 
 
