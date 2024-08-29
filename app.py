@@ -8,7 +8,7 @@ from streamlit_drawable_canvas import st_canvas
 from app_tools import zoom_on_digit
 import pandas as pd
 import datetime as dt
-import plotly.figure_factory as ff
+# import plotly.figure_factory as ff
 
 # ---------------------------- Title, Name, and Short Description ----------------------------------
 st.set_page_config(page_title='Handwritten Digit Recognition', layout='wide')
