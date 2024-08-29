@@ -15,7 +15,7 @@ def dist(x, y):
     return sum([(bytes_to_int(x_i) - bytes_to_int(y_i)) ** 2 for x_i, y_i in zip(x, y)]) ** 0.5
 
 
-def get_training_distance(X_train, test_sample):
+def get_training_distances(X_train, test_sample):
     """
     Compute distance between test sample and all training samples
     """
@@ -36,7 +36,7 @@ def knn(X_train=TRAIN_DATA_FILE, y_train=TRAIN_LABEL_FILE, X_test=TEST_DATA_FILE
 
     y_pred = []
     for sample in X_test:
-        distances = get_training_distance(X_train, sample)
+        distances = get_training_distances(X_train, sample)
         sorted_indices = [
             pair[0]
             for pair in sorted(
