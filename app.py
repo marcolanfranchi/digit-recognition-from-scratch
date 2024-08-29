@@ -5,7 +5,6 @@ from load_data import bytes_to_int
 from PIL import Image
 import numpy as np
 from streamlit_drawable_canvas import st_canvas
-import streamlit_drawable_canvas
 from app_tools import zoom_on_digit
 import pandas as pd
 import datetime as dt
@@ -15,7 +14,7 @@ import plotly.figure_factory as ff
 st.set_page_config(page_title='Handwritten Digit Recognition', layout='wide')
 st.title('Handwritten Digit Recognition with KNN')
 st.markdown('''
-            :grey[Made by Marco Lanfranchi (August 2024)]
+            :grey[August 2024]
             ''')
 st.write("")
 st.write("")
@@ -153,7 +152,7 @@ with tab2: # -------------------------------------------------------------------
             height=224,
             width=224,
             drawing_mode="freedraw",
-            key="canvas"
+            key="canvas_1"
             )
 
 
