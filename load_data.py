@@ -1,14 +1,16 @@
 
-DATA_DIR = 'data/'
-TRAIN_DATA_FILE = DATA_DIR + 'train-images-idx3-ubyte'
-TRAIN_LABEL_FILE = DATA_DIR + 'train-labels-idx1-ubyte'
-TEST_DATA_FILE = DATA_DIR + 't10k-images-idx3-ubyte'
-TEST_LABEL_FILE = DATA_DIR + 't10k-labels-idx1-ubyte'
 
 def bytes_to_int(bytes):
+    """
+    Convert bytes to integer
+    """
     return int.from_bytes(bytes, byteorder='big')
 
+
 def read_images(filename):
+    """
+    Read images from file
+    """
     images = []
     with open(filename, 'rb') as f:
         _ = f.read(4)  # magic number
@@ -26,7 +28,11 @@ def read_images(filename):
             images.append(image)
     return images
 
+
 def read_labels(filename):
+    """
+    Read labels from file
+    """
     labels = []
     with open(filename, 'rb') as f:
         _ = f.read(4)  # magic number
@@ -38,32 +44,14 @@ def read_labels(filename):
 
 
 def flatten_list(list):
+    """
+    Flatten list of lists to 1D list
+    """
     return [item for sublist in list for item in sublist]
 
+
 def extract_features(X):
+    """
+    Extract features from images
+    """
     return [flatten_list(x) for x in X]
-
-
-def knn(X_train, y_train, X_test, y_test):
-    pass
-
-
-
-def main():
-    X_train = read_images(TRAIN_DATA_FILE)
-    y_train = read_labels(TRAIN_LABEL_FILE)
-    X_test = read_images(TEST_DATA_FILE)
-    y_test = read_labels(TEST_LABEL_FILE)
-
-    print(len(X_train[0]))
-    print(len(X_test[0]))
-
-    X_train = extract_features(X_train)
-    X_test = extract_features(X_test)
-
-    print(len(X_train[0]))
-    print(len(X_test[0]))
-
-
-if __name__ == '__main__':
-    main()
