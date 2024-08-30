@@ -14,26 +14,23 @@ import datetime as dt
 st.set_page_config(page_title='Handwritten Digit Recognition', layout='wide')
 st.title('Handwritten Digit Recognition with KNN')
 st.markdown('''
-            :grey[August 2024]
+            :grey[ML. August 2024]
             ''')
 st.write("")
 st.write("")
 
-st.markdown("This project explores handwritten digit recognition using the MNIST dataset and a K-nearest neighbors (KNN) \
-         algorithm implemented from scratch in Python. In the `About` tab, you can learn about the dataset and algorithm implemented from scratch. \
-         Then in the `Test Model` tab, you can test the model yourself by drawing a digit, running the knn algorithm, and seeing if the algorithm \
-         correctly classifies your digit.")
+st.markdown("This project explores handwritten digit recognition using the K-nearest neighbors (KNN) algorithm implemented \
+             from scratch in Python and the MNIST dataset. In the drop-down sections below, you can learn about the dataset and the algorithm. \
+            In the [`Test Model`](#test-the-model) section, you can test the model yourself by drawing a digit, running the knn algorithm, \
+             and seeing if it correctly recognizes your digit.")
 # --------------------------------------------------------------------------------------------------
 
 
-# initialize tabs
-tab1, tab2 = st.tabs(['About', 'Test Model'])
-
-with tab1: # ---------------------------------------------------------------------------------------
 # Section 1: MNIST Dataset Overview
+with st.expander("Overview of the MNIST Dataset"): # ---------------------------------------------------------------------------------------
     st.header('Overview of the MNIST Dataset')
     st.write("The MNIST dataset contains 70,000 images of handwritten digits (0-9), where each image is represented as a 28x28 grid of \
-            pixel values. Each pixel is stored as a  value ranging from 0 (black) to 255 (white), indicating the \
+            pixel values. Each pixel is stored as a byte value ranging from 0 (black) to 255 (white), indicating the \
             grayscale colour at each point.")
     # Uncomment the line below to add an example image from the MNIST dataset
     st.image('images/mnist.png', caption='10 Samples from MNIST dataset', width=600)
@@ -65,7 +62,10 @@ with tab1: # -------------------------------------------------------------------
     st.write("After flattening the image's pixel matrix to an array, the data is in a format where we can calculate the distance \
             between the test image's and all of the training images from the MNIST dataset within the KNN algorithm.")
 
-    # Section 2: KNN Algorithm on Flattened Images
+
+
+# Section 2: KNN Algorithm on Flattened Images
+with st.expander("How the K-Nearest Neighbors Algorithm Works on MNIST Data"): # ---------------------------------------------------------------------------------------
     st.header('How the K-Nearest Neighbors Algorithm Works on MNIST Data')
     st.write("Once the images pixels are flattened to a 1D array, KNN can be used to classify the \
             handwritten digits. For each test image, the algorithm computes the distance between the \
@@ -116,7 +116,9 @@ with tab1: # -------------------------------------------------------------------
     st.write("The algorithm calculates the distance from the test image to each training image, finds the 'k' nearest \
             images, and assigns the most frequent label among these neighbors as the predicted class for the test image.")
 
-    # Section 3: Putting It All Together
+
+# Section 3: Putting It All Together
+with st.expander("Summary of KNN for Handwritten Digit Recognition"): # ---------------------------------------------------------------------------------------
     st.header('Summary of KNN for Handwritten Digit Recognition')
     st.write("In summary, the workflow for recognizing a handwritten digit with KNN using the the MNIST dataset involves:")
     st.write("""
@@ -126,25 +128,25 @@ with tab1: # -------------------------------------------------------------------
     4. **Voting**: Take a majority vote among the neighbors to determine the predicted digit.
     """)
 
-with tab2: # ---------------------------------------------------------------------------------------
+# with st.expander("Test the Model"): # ---------------------------------------------------------------------------------------
 
-    # Interactive Testing Part
-    st.header('Test the Model')
+# Interactive Testing Part
+st.header('Test the Model')
 
-    st.write("")
-    st.write("")
+st.write("")
+st.write("")
 
-    col1, col2, col3 = st.columns([5, 1, 5])
+col1, col2, col3 = st.columns([5, 1, 5])
 
-    with col1:
+with col1:
 
-        img_col1, img_col2 = st.columns(2)
+    img_col1, img_col2 = st.columns(2)
 
-        with img_col1:
+    with img_col1:
 
-            st.write("Draw a digit in the canvas below:")
-            canvas_result = st_canvas(
-            fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
+        st.write("Draw a digit below:")
+        canvas_result = st_canvas(
+            fill_color="rgba(255, 165, 0, 0.3)",  
             stroke_width=16,
             stroke_color="#fff",
             background_color="#000",
@@ -152,63 +154,62 @@ with tab2: # -------------------------------------------------------------------
             height=224,
             width=224,
             drawing_mode="freedraw",
-            key="canvas"
-            )
+            key="canvas_1"
+        )
+
+    with img_col2:
+        st.write("Your drawing:")
+        # Do something interesting with the image data and paths
+        image = Image.fromarray(canvas_result.image_data.astype('uint8'), 'RGBA')
+        image = image.convert('L')
+        # image = zoom_on_digit(image)
+        image = image.resize((28, 28))
+        st.image(image, use_column_width=True, clamp=True)
+    
+    st.subheader("KNN Model Parameters")
+    
+    # Allow the user to change the value of k
+    k_value = int(st.text_input("Edit the value of k:", value=3))
+    
+
+    # Display the code with an editable input for k
+    st.code('''
+    knn(X_test=[image], k={})
+    '''.format(k_value), language='python')
+
+    test = st.button("Test the model")
+    if test:
+        st.write("Classifying the uploaded image...")
+        image = np.array(image).flatten()
+        # convert image to bytes
+        image = [bytes([pixel]) for pixel in image]
+
+        # Run the KNN model on the uploaded image
+        prediction = knn(X_test = [image], k=k_value)
+        st.write("Recognized digit:", bytes_to_int(prediction[0]))
+
+# --------------------------------------------------------------------------------------------------
+with col2:
+    st.write("") # empty column for blank space
 
 
-        with img_col2:
-            st.write("Your drawing:")
-            # Do something interesting with the image data and paths
-            image = Image.fromarray(canvas_result.image_data.astype('uint8'), 'RGBA')
-            image = image.convert('L')
-            # image = zoom_on_digit(image)
-            image = image.resize((28, 28))
-            st.image(image, use_column_width=True, clamp=True)
-        
-        st.subheader("KNN Model Parameters")
-        
-        # Allow the user to change the value of k
-        k_value = int(st.text_input("Edit the value of k:", value=3))
-        
+# --------------------------------------------------------------------------------------------------
+with col3:
+    st.write("KNN Visualization:")
+    # placeholder stuff below
+    # Add histogram data
+    # x1 = np.random.randn(200) - 2
+    # x2 = np.random.randn(200)
+    # x3 = np.random.randn(200) + 2
 
-        # Display the code with an editable input for k
-        st.code('''
-        knn(X_test=[image], k={})
-        '''.format(k_value), language='python')
+    # # Group data together
+    # hist_data = [x1, x2, x3]
 
-        test = st.button("Test the model")
-        if test:
-            st.write("Classifying the uploaded image...")
-            image = np.array(image).flatten()
-            # convert image to bytes
-            image = [bytes([pixel]) for pixel in image]
+    # group_labels = ['Group 1', 'Group 2', 'Group 3']
 
-            # Run the KNN model on the uploaded image
-            prediction = knn(X_test = [image], k=k_value)
-            st.write("Recognized digit:", bytes_to_int(prediction[0]))
+    # # Create distplot with custom bin_size
+    # fig = ff.create_distplot(
+    #         hist_data, group_labels, bin_size=[.1, .25, .5])
 
-    # --------------------------------------------------------------------------------------------------
-    with col2:
-        st.write("") # empty column for blank space
-
-
-    # --------------------------------------------------------------------------------------------------
-    with col3:
-        st.write("KNN Visualization:")
-        # placeholder stuff below
-        # Add histogram data
-        # x1 = np.random.randn(200) - 2
-        # x2 = np.random.randn(200)
-        # x3 = np.random.randn(200) + 2
-
-        # # Group data together
-        # hist_data = [x1, x2, x3]
-
-        # group_labels = ['Group 1', 'Group 2', 'Group 3']
-
-        # # Create distplot with custom bin_size
-        # fig = ff.create_distplot(
-        #         hist_data, group_labels, bin_size=[.1, .25, .5])
-
-        # # Plot!
-        # st.plotly_chart(fig, use_container_width=True)
+    # # Plot!
+    # st.plotly_chart(fig, use_container_width=True)
